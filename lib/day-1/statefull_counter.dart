@@ -148,7 +148,6 @@ class _StatefullCounterState extends State<StatefullCounter> {
                 onPressed: toggleBgColor,
                 child: Text("Toggle Bg Color"),
               ),
-              SizedBox(height: 10),
             ],
           ),
         );

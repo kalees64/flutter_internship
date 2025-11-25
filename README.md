@@ -207,3 +207,158 @@ When widget is removed:
 
         • Create a Toggle button using Stateful widget
         • Press it → change background + text
+
+# DAY - 2
+
+## Goal: Build your own component library.
+
+### What are custom widgets?
+
+A custom widget is simply a widget you create yourself so you can:
+
+✅ Reuse UI
+✅ Write cleaner and organized code
+✅ Separate responsibilities
+✅ Improve readability
+✅ Make UI scalable
+
+Types of Custom Widgets
+
+There are two ways to create custom widgets:
+
+1️⃣ Stateless custom widget
+
+UI does not change after it's built
+
+Good for buttons, custom text widgets, labels, reusable cards
+
+2️⃣ Stateful custom widget
+
+UI can change based on interactions
+
+Good for counters, forms, animations, toggles
+
+### Passing parameters (final String title)
+
+When you create custom widgets, you often want to pass some data into them — like a title, color, count, or callback function.
+
+`final String title;`
+
+Why final?
+
+The value cannot change after initialization.
+
+Widgets are immutable — their properties shouldn't change.
+
+```
+import 'package:flutter/material.dart';
+
+class CustomTitle extends StatelessWidget {
+  final String title; // parameter
+
+  const CustomTitle({
+    super.key,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+    );
+  }
+}
+
+```
+
+### const usage
+
+Flutter is built for performance. const helps with that.
+
+What does const mean?
+
+The widget will never change
+
+Flutter reuses the widget instead of rebuilding it
+
+Saves CPU, improves app performance
+
+Helps avoid unnecessary rebuilds
+
+✔️ Use const when:
+
+The widget and its values do NOT change
+
+For example:
+
+```
+const Text("Hello");
+const SizedBox(height: 20);
+const Icon(Icons.home);
+```
+
+❌ Do NOT use const when:
+
+You're using variables
+
+Example:
+
+`Text(username); // not const`
+
+### Material design basics
+
+Material Design is Google’s design system.
+Flutter has Material built-in, so you get:
+
+✔️ Buttons
+✔️ AppBar
+✔️ Cards
+✔️ Icons
+✔️ Themes
+✔️ FAB (Floating Action Button)
+✔️ Navigation
+
+```
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+```
+
+Scaffold gives you:
+
+```
+AppBar
+
+Body
+
+Drawer
+
+BottomNavigationBar
+
+FloatingActionButton
+```
+
+### AppButton() — reusable button Props: title, width, height, color, onTap
+
+### AppCard() — reusable card Props: image, title, description, onTap
+
+### Create a list of cards using your AppCard
+
+### Click event prints output in console

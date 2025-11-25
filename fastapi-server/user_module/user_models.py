@@ -12,5 +12,21 @@ class CreateUserModel(BaseModel):
     email: str
     age: int
 
+class UpdateUserNameAndAgeModel(BaseModel):
+    name: str
+    age: int
+
 class GetAllUsersResponseModel(BaseModel):
     users: List[UserModel]
+
+class CreateUserResponseModel(BaseModel):
+    message: str
+    user_id: int
+
+class UpdateUserNameAndAgeResponseModel(BaseModel):
+    message: str
+    affected_rows: int
+
+class DeleteUserResponseModel(BaseModel):
+    message: str
+    affected_rows: int

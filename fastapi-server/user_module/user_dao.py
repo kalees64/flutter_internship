@@ -34,3 +34,33 @@ def create_user(user: user_models.CreateUserModel):
         raise e
     finally:
         cursor.close()
+
+def update_user_name_and_age(user_id: int, user: user_models.UpdateUserNameAndAgeModel):
+    try:
+        if not db.is_connected():
+            raise HTTPException(status_code=500, detail="Database is not connected")
+        cursor = db.cursor()
+        query = "UPDATE users SET name = %s, age = %s WHERE id = %s"
+        values = (user.name, user.age, user_id)
+        cursor.execute(query, values)
+        db.commit()
+        return {"message": "User updated successfully", "affected_rows": cursor.rowcount}
+    except Exception as e:
+        raise e
+    finally:
+        cursor.close()
+
+def delete_user(user_id: int):
+    try:
+        if not db.is_connected():
+            raise HTTPException(status_code=500, detail="Database is not connected")
+        cursor = db.cursor()
+        query = "DELETE FROM users WHERE id = %s"
+        values = (user_id,)
+        cursor.execute(query, values)
+        db.commit()
+        return {"message": "User deleted successfully", "affected_rows": cursor.rowcount}
+    except Exception as e:
+        raise e
+    finally:
+        cursor.close()

@@ -1,8 +1,10 @@
 from fastapi import APIRouter
 from starlette import status
 from . import user_models, user_service
+from fastapi import Depends
+from guard.guard import verify_bearer_token
 
-user_controller = APIRouter(tags=["User"], prefix="/api/v1/user" )
+user_controller = APIRouter(tags=["User"], prefix="/api/v1/user" , dependencies=[Depends(verify_bearer_token)])
 
 @user_controller.get("", status_code=status.HTTP_200_OK, response_model=user_models.GetAllUsersResponseModel)
 def get_all_users():

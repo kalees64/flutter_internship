@@ -1,13 +1,7 @@
 from fastapi import HTTPException
-import mysql.connector
+from utils.db import db
 from . import user_models
 
-db = mysql.connector.connect(
-    host = "localhost",
-    user = "root",
-    password = "",
-    database = "flutter_intern"
-)
 
 def get_all_users():
     try:
@@ -25,8 +19,8 @@ def create_user(user: user_models.CreateUserModel):
         if not db.is_connected():
             raise HTTPException(status_code=500, detail="Database is not connected")
         cursor = db.cursor()
-        query = "INSERT INTO users (name, email, age) VALUES (%s, %s, %s)"
-        values = (user.name, user.email, user.age)
+        query = "INSERT INTO users (name, email, age, password) VALUES (%s, %s, %s, %s)"
+        values = (user.name, user.email, user.age, user.password)
         cursor.execute(query, values)
         db.commit()
         return {"message": "User created successfully", "user_id": cursor.lastrowid}

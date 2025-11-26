@@ -11,6 +11,7 @@ class CreateUserModel(BaseModel):
     name: str
     email: str
     age: int
+    password: str
 
 class UpdateUserNameAndAgeModel(BaseModel):
     name: str

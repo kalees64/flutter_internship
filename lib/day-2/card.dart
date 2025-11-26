@@ -64,7 +64,11 @@ class VkCard extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
-            Text(description, style: TextStyle(color: Colors.blueGrey)),
+            Text(
+              description,
+              maxLines: 2,
+              style: TextStyle(color: Colors.blueGrey),
+            ),
           ],
         ),
       ),

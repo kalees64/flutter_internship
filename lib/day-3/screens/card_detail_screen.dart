@@ -1,29 +1,81 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_internship/day-3/models/data.dart';
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:typed_data';
 
-class CardDetailScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_internship/day-3/services/gradients_service.dart';
+
+class CardDetailScreen extends StatefulWidget {
+  const CardDetailScreen({super.key, required this.cardId});
+
   final int cardId;
 
-  const CardDetailScreen({super.key, required this.cardId});
+  @override
+  State<CardDetailScreen> createState() => _CardDetailScreenState();
+}
+
+class _CardDetailScreenState extends State<CardDetailScreen> {
+  late dynamic card;
+  bool isLoading = false;
+
+  Future<void> fetchCard() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      var res = await fetchGradientById(widget.cardId);
+      log('Crad response ${jsonDecode(res.body)}');
+      setState(() {
+        card = jsonDecode(res.body)["gradient"];
+      });
+    } catch (e, stackTrace) {
+      log('Error fetching card: $e', error: e, stackTrace: stackTrace);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCard();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final GradientCard selectedCard = cards.firstWhere(
-      (card) => card.id == cardId,
-    );
     var deviceHeight = MediaQuery.of(context).size.height;
     var deviceWidth = MediaQuery.of(context).size.width;
+
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    Uint8List? decodedImage;
+
+    try {
+      // Remove prefix if exists (data:image/png;base64,...)
+      final cleaned = card["image"].contains(',')
+          ? card["image"].split(',')[1]
+          : card["image"];
+
+      decodedImage = base64Decode(cleaned);
+    } catch (e) {
+      debugPrint("Invalid base64 image: $e");
+    }
+
     return Stack(
       children: [
         // Image
         Hero(
-          tag: selectedCard.id,
+          tag: widget.cardId,
           child: Container(
             width: deviceWidth,
             height: deviceHeight * 0.5,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(selectedCard.image),
+                image: MemoryImage(decodedImage!),
                 fit: BoxFit.cover,
               ),
             ),
@@ -67,7 +119,7 @@ class CardDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  selectedCard.title,
+                  card["title"],
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 24,
@@ -78,7 +130,7 @@ class CardDetailScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  selectedCard.description,
+                  card["description"],
                   style: TextStyle(
                     fontSize: 16,
                     color: const Color.fromARGB(255, 71, 69, 69),

@@ -12,4 +12,4 @@ app.include_router(user_controller)
 app.include_router(gradient_controller)
 
 # if __name__ == "__main__":
-#     run("main:app", host="127.0.0.1", port=3000, reload=True)
+#     run("main:app", host="127.0.0.1", port=8002, reload=True)
